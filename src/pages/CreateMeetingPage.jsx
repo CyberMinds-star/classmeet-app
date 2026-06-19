@@ -19,25 +19,13 @@ export default function CreateMeetingPage() {
     try {
       const room_id = generateRoomId()
       const passcode = generatePasscode()
-
-      // Create the Daily.co room via Netlify Function
-      const roomRes = await fetch('/.netlify/functions/create-room', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ roomName: room_id }),
-      })
-      const roomData = await roomRes.json()
-      if (!roomRes.ok) throw new Error(roomData.error || 'Failed to create video room')
-
       const meeting = {
         room_id,
         title: title.trim(),
         passcode,
         scheduled_at: scheduledAt ? new Date(scheduledAt).toISOString() : null,
-        room_url: roomData.url,
       }
 
-      // Insert into Supabase with retry
       let dbError = null
       for (let attempt = 0; attempt <= 2; attempt++) {
         const { error } = await supabase.from('meetings').insert([meeting])
