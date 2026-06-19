@@ -30,7 +30,8 @@ export default function CreateMeetingPage() {
       saveMeeting(meeting)
       navigate(`/created/${room_id}`)
     } catch (err) {
-      setError('Failed to create meeting. Check your Supabase connection and try again.')
+      const msg = err?.message || err?.error_description || JSON.stringify(err)
+      setError(`Error: ${msg}`)
       console.error(err)
     } finally {
       setLoading(false)
