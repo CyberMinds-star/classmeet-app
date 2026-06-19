@@ -6,6 +6,7 @@ import MeetingCreatedPage from './pages/MeetingCreatedPage'
 import JoinMeetingPage from './pages/JoinMeetingPage'
 import MeetingRoomPage from './pages/MeetingRoomPage'
 import MyMeetingsPage from './pages/MyMeetingsPage'
+import WhiteboardPage from './pages/WhiteboardPage'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
             <Route path="/join" element={<JoinMeetingPage />} />
             <Route path="/room/:roomId" element={<MeetingRoomPage />} />
             <Route path="/my-meetings" element={<MyMeetingsPage />} />
+            <Route path="/whiteboard" element={<WhiteboardPage />} />
           </Routes>
         </main>
         <footer className="text-center py-4 text-sm text-gray-400 border-t border-gray-200">

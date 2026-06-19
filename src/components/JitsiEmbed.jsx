@@ -1,6 +1,18 @@
 import { useEffect, useRef } from 'react'
 
-export default function JitsiEmbed({ roomId, displayName }) {
+const HOST_TOOLBAR = [
+  'microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen',
+  'fodeviceselection', 'hangup', 'chat', 'raisehand', 'videoquality',
+  'tileview', 'participants-pane', 'security', 'mute-everyone',
+  'select-background', 'stats', 'shortcuts', 'help',
+]
+
+const GUEST_TOOLBAR = [
+  'microphone', 'camera', 'fullscreen', 'hangup', 'chat',
+  'raisehand', 'tileview', 'select-background',
+]
+
+export default function JitsiEmbed({ roomId, displayName, isHost, onApiReady }) {
   const containerRef = useRef(null)
   const apiRef = useRef(null)
 
@@ -26,18 +38,17 @@ export default function JitsiEmbed({ roomId, displayName }) {
           startWithAudioMuted: false,
           startWithVideoMuted: false,
           enableWelcomePage: false,
-          prejoinPageEnabled: true,
+          prejoinPageEnabled: false,
+          disableRemoteMute: !isHost,
+          disableKick: !isHost,
         },
         interfaceConfigOverwrite: {
           SHOW_JITSI_WATERMARK: false,
           SHOW_WATERMARK_FOR_GUESTS: false,
-          TOOLBAR_BUTTONS: [
-            'microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen',
-            'fodeviceselection', 'hangup', 'chat', 'raisehand',
-            'videoquality', 'tileview', 'help',
-          ],
+          TOOLBAR_BUTTONS: isHost ? HOST_TOOLBAR : GUEST_TOOLBAR,
         },
       })
+      if (onApiReady) onApiReady(apiRef.current)
     }
 
     loadJitsi()
@@ -48,7 +59,7 @@ export default function JitsiEmbed({ roomId, displayName }) {
         apiRef.current = null
       }
     }
-  }, [roomId, displayName])
+  }, [roomId, displayName, isHost])
 
   return <div ref={containerRef} className="w-full h-full" />
 }

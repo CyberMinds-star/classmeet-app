@@ -25,7 +25,13 @@ export default function CreateMeetingPage() {
         passcode,
         scheduled_at: scheduledAt ? new Date(scheduledAt).toISOString() : null,
       }
-      const { error: dbError } = await supabase.from('meetings').insert([meeting])
+      let dbError = null
+      for (let attempt = 0; attempt <= 2; attempt++) {
+        const { error } = await supabase.from('meetings').insert([meeting])
+        if (!error) { dbError = null; break }
+        dbError = error
+        if (attempt < 2) await new Promise(r => setTimeout(r, 800))
+      }
       if (dbError) throw dbError
       saveMeeting(meeting)
       navigate(`/created/${room_id}`)
