@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npm run:*)",
+      "Bash(npm test:*)",
+      "Bash(npm install:*)",
+      "Bash(pytest:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      { "matcher": "Write|Edit", "hooks": [ { "type": "command", "command": "npm run format || true" } ] }
+    ],
+    "Stop": [
+      { "hooks": [ { "type": "command", "command": "npm test || true" } ] }
+    ]
+  }
+}

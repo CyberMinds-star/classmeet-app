@@ -1,0 +1,59 @@
+Step 1 — Set up Supabase (5 minutes, free)
+
+CyberMinds-star's Project
+Supabase###2030
+
+1. Go to supabase.com → create a free account → create a new project
+2. In your project, go to SQL Editor and run this SQL:
+
+create table meetings (
+  id           uuid primary key default gen_random_uuid(),
+  room_id      text not null unique,
+  title        text not null,
+  passcode     char(6) not null,
+  scheduled_at timestamptz,
+  created_at   timestamptz default now()
+);
+alter table meetings enable row level security;
+create policy "anyone can insert" on meetings for insert with check (true);
+create policy "anyone can select" on meetings for select using (true);
+
+3. Go to Settings → API and copy your Project URL and anon public key
+
+Project URL
+https://supabase.com/dashboard/project/jjpqyrynnolcsbkrrwpc/settings/api-keys
+
+anon public key
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqcHF5cnlubm9sY3Nia3Jyd3BjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4NzI4MzUsImV4cCI6MjA5NzQ0ODgzNX0.wC-PZedA-itKbR-tPqNkT-VpYky-H206q3aDrUkj0Xo
+
+4. Open .env.local in the project folder and replace the placeholder values with your real keys
+
+---
+Step 2 — Deploy to Netlify (5 minutes, free)
+
+1. Push this folder to a GitHub repo (create one at github.com)
+2. Go to netlify.com → New Site → Import from GitHub → pick your repo
+3. Set build command: npm run build | Publish directory: dist
+4. In Netlify → Site settings → Environment variables, add:
+  - VITE_SUPABASE_URL = your Supabase project URL
+  - VITE_SUPABASE_ANON_KEY = your Supabase anon key
+5. Click Deploy — your site goes live at a free .netlify.app URL
+
+---
+What the app does
+
+┌─────────────────┬───────────────────────────────────────────────────────────────────────────────┐
+│     Feature     │                                 How it works                                  │
+├─────────────────┼───────────────────────────────────────────────────────────────────────────────┤
+│ Start a meeting │ Enter class title + optional date/time → get a unique link + 6-digit passcode │
+├─────────────────┼───────────────────────────────────────────────────────────────────────────────┤
+│ Share           │ Copy link + passcode → send to students via WhatsApp/email                    │
+├─────────────────┼───────────────────────────────────────────────────────────────────────────────┤
+│ Join            │ Student pastes link → enters passcode → types their name → video room opens   │
+├─────────────────┼───────────────────────────────────────────────────────────────────────────────┤
+│ Video call      │ Jitsi Meet (free) — camera, mic, screen share, chat all built in              │
+├─────────────────┼───────────────────────────────────────────────────────────────────────────────┤
+│ My Meetings     │ All your created meetings saved in the browser                                │
+└─────────────────┴───────────────────────────────────────────────────────────────────────────────┘
+
+Do you want me to help you with the GitHub push or the Supabase setup?
